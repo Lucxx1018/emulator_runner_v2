@@ -1,8 +1,28 @@
+use rusqlite::{Connection, Result};
 use std::{process::Command, str::FromStr};
-
 fn main() {
-    println!("Hello, world!");
+    let conn = Conn::open();
     let choice = mainmenu();
+    match choice {
+        Choice::StartGame => startgame(),
+        Choice::AddGame => todo!(),
+        Choice::AddEmu => todo!(),
+        Choice::ReadGameDatabase => todo!(),
+        Choice::ReadEmuDatabase => todo!(),
+    }
+}
+
+struct Conn {
+    connection: Connection,
+}
+
+impl Conn {
+    fn open() -> Self {
+        match Connection::open("data.db") {
+            Ok(connection) => Conn { connection },
+            Err(_) => panic!("Database could not be found or created."),
+        }
+    }
 }
 
 enum Choice {
@@ -49,7 +69,12 @@ fn mainmenu() -> Choice {
         let choice = Choice::from_str(&choice_str);
         match choice {
             Ok(c) => break c,
-            Err(_) => panic!("Fuck"),
+            Err(_) => println!("Oops! That's not a valid number."),
         }
     }
+}
+
+fn startgame() {
+    println!("Type name of game to start:");
+    let game = input();
 }
